@@ -12,7 +12,7 @@ class CreateJabatansTable extends Migration
     public function up(): void
     {
         Schema::create('jabatans', function (Blueprint $table) {
-            $table->id('jabatan_id');
+            $table->id();
             $table->string('jabatan_nama', 255);
             $table->string('jabatan_keterangan', 255)->nullable();
             $table->timestamps();

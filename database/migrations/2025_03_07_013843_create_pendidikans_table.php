@@ -12,7 +12,7 @@ class CreatePendidikansTable extends Migration
     public function up(): void
     {
         Schema::create('pendidikans', function (Blueprint $table) {
-            $table->id('pendidikan_id');
+            $table->id();
             $table->string('pendidikan_nama', 255);
             $table->string('pendidikan_keterangan', 255);
             $table->timestamps();

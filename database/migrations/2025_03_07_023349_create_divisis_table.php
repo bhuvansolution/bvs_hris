@@ -12,7 +12,7 @@ class CreateDivisisTable extends Migration
     public function up(): void
     {
         Schema::create('divisis', function (Blueprint $table) {
-            $table->id('divisi_id');
+            $table->id();
             $table->string('divisi_nama', 255);
             $table->string('divisi_keterangan', 255)->nullable();
             $table->timestamps();

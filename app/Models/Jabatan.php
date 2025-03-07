@@ -8,12 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Jabatan extends Model
 {
     use HasFactory;
-
-    protected $table = 'jabatan';
-    protected $primaryKey = 'jabatan_id';
-
-    protected $fillable = [
-        'jabatan_nama',
-        'jabatan_keterangan',
-    ];
+    protected $guarded = ['id'];
 }

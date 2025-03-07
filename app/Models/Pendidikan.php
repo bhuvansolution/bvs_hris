@@ -8,13 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Pendidikan extends Model
 {
     use HasFactory;
-
-    protected $table = 'pendidikans';
-
-    protected $primaryKey = 'pendidikan_id';
-
-    protected $fillable = [
-        'pendidikan_nama',
-        'pendidikan_keterangan',
-    ];
+    protected $guarded = ['id'];
 }
