@@ -4,15 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Devisi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class DevisiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $devisis = Devisi::all();
+
+        // Periksa apakah request dari API atau View
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'data' => $devisis,
+            ], 200);
+        }
+
         return view('devisi.index', compact('devisis'));
     }
 
@@ -21,7 +31,7 @@ class DevisiController extends Controller
      */
     public function create()
     {
-        //
+        return view('devisi.create');
     }
 
     /**
@@ -29,20 +39,36 @@ class DevisiController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'devisi_nama' => 'required|string|max:255',
-            'devisi_keterangan' => 'nullable|string|max:255',
+        $validatedData = $request->validate([
+            'divisi_nama' => 'required|string|max:255',
+            'divisi_keterangan' => 'nullable|string|max:255',
         ]);
 
-        Devisi::create($request->all());
-        return redirect()->route('devisi.index')->with('success', 'devisi berhasil ditambahkan!');
+        $devisi = Devisi::create($validatedData);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Devisi berhasil ditambahkan!',
+                'data' => $devisi,
+            ], 201);
+        }
+
+        return redirect()->route('devisi.index')->with('success', 'Devisi berhasil ditambahkan!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Devisi $devisi)
+    public function show(Devisi $devisi, Request $request)
     {
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'data' => $devisi,
+            ], 200);
+        }
+
         return view('devisi.show', compact('devisi'));
     }
 
@@ -57,24 +83,63 @@ class DevisiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Devisi $devisi)
+    public function update(Request $request, $id)
     {
+        // Cari data Divisi berdasarkan ID
+        $divisi = Devisi::findOrFail($id);
 
-        $request->validate([
-            'devisi_nama' => 'required|string|max:255',
-            'devisi_keterangan' => 'nullable|string|max:255',
+        // Validasi input (hanya required untuk memastikan key ada)
+        $validated = $request->validate([
+            'divisi_nama' => 'nullable',
+            'divisi_keterangan' => 'nullable',
+            'additional_info' => 'nullable|json',
         ]);
 
-        $devisi->update($request->all());
-        return redirect()->route('devisi.index')->with('success', 'devisi berhasil diperbarui!');
+        // Debug data dari request
+        Log::info('Request received', ['request' => $request->all()]);
+        dd($request->all()); // Untuk debugging di Postman
+
+        // Handle JSON decoding untuk field additional_info jika ada
+        if (isset($validated['additional_info'])) {
+            $validated['additional_info'] = json_encode(json_decode($validated['additional_info'], true));
+        }
+
+        // Tambahkan informasi pengguna yang memperbarui data
+        $validated['updated_by'] = 1; // Sesuaikan dengan sistem otentikasi Anda
+
+        // Debug sebelum update
+        Log::debug('Data before update', ['divisi' => $divisi->toArray()]);
+        Log::debug('Validated data', ['data' => $validated]);
+
+        // Lakukan update data
+        $divisi->update($validated);
+
+        // Debug setelah update
+        Log::debug('Data after update', ['divisi' => $divisi->fresh()->toArray()]);
+
+        // Log hasil update
+        Log::info('Divisi updated', ['request' => $validated, 'response' => $divisi]);
+
+        // Respon JSON
+        return response()->json([
+            'status' => true,
+            'message' => 'Data Updated',
+            'data' => $divisi,
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Devisi $devisi)
+
+    public function destroy(Devisi $devisi, Request $request)
     {
         $devisi->delete();
-        return redirect()->route('devisi.index')->with('success', 'devisi berhasil dihapus!');
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Devisi berhasil dihapus!',
+            ], 200);
+        }
+
+        return redirect()->route('devisi.index')->with('success', 'Devisi berhasil dihapus!');
     }
 }
