@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('devisis', function (Blueprint $table) {
             $table->id();
-            $table->string('divisi_nama', 255);
-            $table->string('divisi_keterangan', 255)->nullable();
+            $table->string('devisi_nama', 255);
+            $table->string('devisi_keterangan', 255)->nullable();
             $table->timestamps();
         });
     }

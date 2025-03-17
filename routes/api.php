@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DevisiController;
+use App\Http\Controllers\IzinKaryawanController;
+use App\Http\Controllers\JenisIzinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('devisi', DevisiController::class);
 Route::put('devisi/{devisi}', [DevisiController::class, 'update']);
+Route::resource('izinkaryawan', IzinKaryawanController::class);
+Route::resource('jenisizin', JenisIzinController::class);

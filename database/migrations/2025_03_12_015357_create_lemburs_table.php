@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('karyawan_id')
                 ->constrained('karyawans')
                 ->onDelete('cascade');
-            $table->string('thr_keterangan');
-            $table->string('thr_keterangan');
-            $table->string('thr_keterangan');
+            $table->date('lembur_jumlah_jam');
+            $table->integer('lembur_total_bayar');
+            $table->string('lembur_keterangan');
             $table->timestamps();
         });
     }

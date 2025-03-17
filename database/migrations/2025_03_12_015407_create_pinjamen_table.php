@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('pinjamen', function (Blueprint $table) {
             $table->id();
             $table->foreignId('karyawan_id')
@@ -23,7 +24,6 @@ return new class extends Migration
             $table->date('pinjaman_lama_cicilan');
             $table->date('pinjaman_cicilan_bulanan');
             $table->string('pinjaman_keterangan');
-            $table->string('pinjaman_jenis');
             $table->enum('status', ['diterima', 'ditolak']);
             $table->timestamps();
         });

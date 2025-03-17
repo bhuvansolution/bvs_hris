@@ -12,7 +12,8 @@ class JenisIzinController extends Controller
      */
     public function index()
     {
-        //
+        $jenisizin = JenisIzin::all();
+        return response()->json($jenisizin);
     }
 
     /**
@@ -28,7 +29,19 @@ class JenisIzinController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'jenisizin_nama' => 'required',
+            'jenisizin_keterangan' => 'required',
+        ]);
+
+
+        $jenisizin = JenisIzin::create($validated);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Jenis izin Created',
+            'data' => $jenisizin
+        ], 201);
     }
 
     /**
@@ -50,16 +63,33 @@ class JenisIzinController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, JenisIzin $jenisIzin)
+    public function update(Request $request,  $id)
     {
-        //
+        $validatedData = $request->validate([
+            'jenisizin_nama' => 'required',
+            'jenisizin_keterangan' => 'required',
+        ]);
+
+        $item = JenisIzin::findOrFail($id);
+        // Update data
+        $item->update($validatedData);
+
+        return response()->json([
+            'message' => 'Item updated successfully',
+            'data' => $item
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JenisIzin $jenisIzin)
+    public function destroy($id)
     {
-        //
+        $jenisizin = JenisIzin::findOrFail($id);
+        JenisIzin::destroy($jenisizin->id);
+        return response()->json([
+            'message' => 'Item deleted successfully',
+            'data' => $jenisizin
+        ], 200);
     }
 }

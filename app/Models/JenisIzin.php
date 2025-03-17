@@ -9,4 +9,14 @@ class JenisIzin extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function Karyawan()
+    {
+        return $this->hasMany(Karyawan::class);
+    }
+
+    public function izinkaryawan()
+    {
+        return $this->hasMany(IzinKaryawan::class);
+    }
 }

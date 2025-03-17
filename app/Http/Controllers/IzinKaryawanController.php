@@ -12,7 +12,8 @@ class IzinKaryawanController extends Controller
      */
     public function index()
     {
-        //
+        $izinkaryawan = IzinKaryawan::all();
+        return response()->json($izinkaryawan);
     }
 
     /**
@@ -28,7 +29,25 @@ class IzinKaryawanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'karyawan_id' => 'required',
+            'jenisizin_id' => 'required',
+            'izin_alasan' => 'required',
+            'izin_waktu' => 'required',
+            'izin_bukti' => 'required',
+            'izin_keterangan' => 'required',
+        ]);
+
+        // Category::create($validated);
+
+        // return redirect()->back()->with('success', 'Category created successfully.');
+        $izin = IzinKaryawan::create($validated);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'izin Created',
+            'data' => $izin
+        ], 201);
     }
 
     /**
