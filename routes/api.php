@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DevisiController;
 use App\Http\Controllers\IzinKaryawanController;
 use App\Http\Controllers\JenisIzinController;
+use App\Http\Controllers\JenisPegawaiController;
+use App\Http\Controllers\KendaraanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +29,5 @@ Route::resource('devisi', DevisiController::class);
 Route::put('devisi/{devisi}', [DevisiController::class, 'update']);
 Route::resource('izinkaryawan', IzinKaryawanController::class);
 Route::resource('jenisizin', JenisIzinController::class);
+Route::resource('jenispegawai', JenisPegawaiController::class);
+Route::resource('kendaraan', KendaraanController::class);
